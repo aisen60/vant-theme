@@ -89,6 +89,13 @@ export const isWhite = (color: string) => {
     return true;
   }
 
+  // CSS may serialize an opaque white value as rgb()/rgba() instead of hex.
+  const normalizedValue = value.replace(/\s/g, '');
+  const rgbWhite = normalizedValue.match(/^rgba?\(255,255,255(?:,([^)]*))?\)$/);
+  if (rgbWhite && (typeof rgbWhite[1] === 'undefined' || Number(rgbWhite[1]) === 1)) {
+    return true;
+  }
+
   // 检查颜色是否为rgba格式或rgb格式
   if (value.startsWith('rgba')) {
     if (value === 'rgba(255, 255, 255, 1)' || value === 'rgba(255, 255, 255)') {
